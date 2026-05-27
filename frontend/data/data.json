@@ -1,0 +1,211 @@
+{
+  "posts": [
+    {
+      "id": "101",
+      "author": "@CryptoKing_99",
+      "text": "WOW! 🚀 Elon just dropped a secret coin! Send 1 ETH to this wallet and get 10 back instantly! [LINK]",
+      "is_fake": true,
+      "truth_impact": -20,
+      "engage_impact": 5
+    },
+    {
+      "id": "102",
+      "author": "@CityWeatherNow",
+      "text": "Severe thunderstorm warning issued for the downtown area starting at 4 PM. Please secure outdoor items.",
+      "is_fake": false,
+      "truth_impact": 15,
+      "engage_impact": 5
+    },
+    {
+      "id": "103",
+      "author": "@HealthGuru_Real",
+      "verified": false,
+      "text": "Doctors are hiding this! Drinking a glass of bleach cures all viruses within 24 hours. #Truth",
+      "image_file": "null",
+      "is_fake": true,
+      "truth_impact": -30,
+      "engage_impact": 15,
+      "feedback_text": "Dangerous medical misinformation. Always verify health claims with official sources."
+    },
+    {
+      "id": "104",
+      "author": "@LocalLibrary",
+      "verified": true,
+      "text": "Reminder: The summer reading program starts next Monday! Sign up at the front desk.",
+      "image_file": "null",
+      "is_fake": false,
+      "truth_impact": 10,
+      "engage_impact": 5,
+      "feedback_text": "Correct. This is a harmless, verified community post."
+    },
+    {
+      "id": "105",
+      "author": "@NewsAlertBot_88",
+      "verified": false,
+      "text": "BREAKING: The Eiffel Tower just collapsed in a massive earthquake! Look at these photos! [LINK]",
+      "image_file": "null",
+      "is_fake": true,
+      "truth_impact": -20,
+      "engage_impact": 20,
+      "feedback_text": "Sensationalist fake news bot. Major events will be covered by multiple reputable news outlets."
+    },
+    {
+      "id": "106",
+      "author": "@GamerDad99",
+      "verified": false,
+      "text": "Anyone know how to fix a stick drift issue on a standard controller? Driving me crazy.",
+      "image_file": "null",
+      "is_fake": false,
+      "truth_impact": 5,
+      "engage_impact": 5,
+      "feedback_text": "Good call. Just a normal user asking a mundane question."
+    },
+    {
+      "id": "107",
+      "author": "@OfficialGov_Update",
+      "verified": false,
+      "text": "Your tax refund is pending. Click here to enter your social security number to claim it immediately: gov-tax-refund.net",
+      "image_file": "null",
+      "is_fake": true,
+      "truth_impact": -25,
+      "engage_impact": -5,
+      "feedback_text": "Phishing scam! Real government agencies do not ask for social security numbers via social media links."
+    },
+    {
+      "id": "108",
+      "author": "@CityTransit",
+      "verified": true,
+      "text": "The Blue Line train will experience 15-minute delays today due to track maintenance.",
+      "image_file": "null",
+      "is_fake": false,
+      "truth_impact": 15,
+      "engage_impact": 0,
+      "feedback_text": "Correct. Verified public service announcement."
+    }
+  ],
+  "level_2_posts": [
+    {
+      "id": "201",
+      "author": "@IronAlpha_Fitness",
+      "verified": false,
+      "text": "Finally broke the plateau! Pulled 400kg like it was empty. If your squat isn't at least 100kg by month two, you're not training, you're playing. Buy my supplement stack! [LINK]",
+      "image_file": "Fake_Gym_Achievement.png",
+      "is_fake": true,
+      "truth_impact": -25,
+      "engage_impact": 30,
+      "feedback_text": "AI Generated. Look at the barbell morphing into his hand and the bending physics. Classic engagement bait to sell fake supplements."
+    },
+    {
+      "id": "202",
+      "author": "@EarthRebellion",
+      "verified": false,
+      "text": "MILLIONS took to the streets today! The media is hiding this massive climate strike! SHARE to show they can't silence us! 🌍✊",
+      "image_file": "Street_Protest.png",
+      "is_fake": true,
+      "truth_impact": -30,
+      "engage_impact": 40,
+      "feedback_text": "AI Generated. Check the background signs—they turn into gibberish ('BHO FECH MENY'). A tactic to manufacture artificial outrage."
+    },
+    {
+      "id": "203",
+      "author": "@StormChaser_EU",
+      "verified": false,
+      "text": "Absolutely terrifying F5 tornado dropping right in the middle of Paris! Unprecedented! Why isn't the government sounding the alarms?!",
+      "image_file": "Weather_Disaster.png",
+      "is_fake": true,
+      "truth_impact": -35,
+      "engage_impact": 45,
+      "feedback_text": "AI Generated. Supercells don't form this cleanly over dense urban heat islands. The lighting on the buildings also doesn't match the storm."
+    },
+    {
+      "id": "204",
+      "author": "@LodzMeteo_Official",
+      "verified": true,
+      "text": "After comparing the latest GFS and ECMWF models, we are looking at a mild evening across the Voivodeship. Expect scattered showers around 18:00.",
+      "image_file": "Weather.png",
+      "is_fake": false,
+      "truth_impact": 20,
+      "engage_impact": -5,
+      "feedback_text": "Correct. Real, verified public service announcement based on actual meteorological data."
+    },
+    {
+      "id": "206",
+      "author": "@CommunityGreenThumb",
+      "verified": false,
+      "text": "The volunteer team did an amazing job with the community pollinator garden this weekend! Stop by and see the echinacea in bloom.",
+      "image_file": "Garden.png",
+      "is_fake": false,
+      "truth_impact": 10,
+      "engage_impact": 5,
+      "feedback_text": "Correct. Real photo. Harmless community engagement post with no AI artifacts."
+    }
+  ],
+  "level_3_posts": [
+    {
+      "id": "301",
+      "author": "@TheDailySatire",
+      "verified": true,
+      "text": "City Council announces new initiative to combat obesity: All sidewalks downtown are now mandatory scooter-only zones. Walking is now a finable offense.",
+      "image_file": "null",
+      "is_fake": true,
+      "truth_impact": -20,
+      "engage_impact": 35,
+      "feedback_text": "Satire. It is meant as a joke, but users are taking it seriously and getting angry. Approving it drives massive engagement but hurts platform trust."
+    },
+    {
+      "id": "302",
+      "author": "@HousingAdvocate",
+      "verified": false,
+      "text": "Tech companies are deliberately making the housing crisis worse by overpaying remote workers. They are ruining our local economy and should be taxed at 90%.",
+      "image_file": "null",
+      "is_fake": false,
+      "truth_impact": 5,
+      "engage_impact": 40,
+      "feedback_text": "Free Speech. This is a highly biased, aggressive opinion, but an opinion is not 'fake news'. Rejecting it suppresses legitimate political speech."
+    },
+    {
+      "id": "303",
+      "author": "@CrimeWatch_Local",
+      "verified": false,
+      "text": "Violent crime in the city has skyrocketed by 500% in just one month! We are living in an absolute warzone! Protect your families!",
+      "image_file": "null",
+      "is_fake": true,
+      "truth_impact": -25,
+      "engage_impact": 45,
+      "feedback_text": "Misleading Context. The '500%' increase was from 1 minor incident to 5 incidents on a single street. True statistic, but highly manipulative framing."
+    },
+    {
+      "id": "304",
+      "author": "@MunicipalGov_Portal",
+      "verified": true,
+      "text": "The City Council meeting minutes for October 12th have been uploaded. Topics include minor zoning adjustments and water management plans.",
+      "image_file": "null",
+      "is_fake": false,
+      "truth_impact": 20,
+      "engage_impact": -15,
+      "feedback_text": "Civic Truth. It is entirely factual and important, but incredibly boring. Approving this protects your Truth score, but your Engagement will drop."
+    },
+    {
+      "id": "305",
+      "author": "@EcoCorp_Global",
+      "verified": true,
+      "text": "We are proud to announce our new eco-friendly data centers! By purchasing carbon offsets, we have completely erased our environmental footprint! 🌿",
+      "image_file": "null",
+      "is_fake": true,
+      "truth_impact": -15,
+      "engage_impact": 20,
+      "feedback_text": "Greenwashing. Corporate PR that technically lies. Buying offsets does not 'erase' a footprint. Moderating corporate sponsors is a tough call."
+    },
+    {
+      "id": "306",
+      "author": "@Whistleblower_99",
+      "verified": false,
+      "text": "LEAKED DOCS: The new highway project was pushed through without a mandatory environmental impact study. The safety committee was completely bypassed.",
+      "image_file": "null",
+      "is_fake": false,
+      "truth_impact": 30,
+      "engage_impact": 25,
+      "feedback_text": "Genuine Leak. Highly controversial and damaging to powerful people, but entirely true. Approving this is risky but essential for the truth."
+    }
+  ]
+}
