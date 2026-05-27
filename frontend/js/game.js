@@ -242,10 +242,6 @@ function handleSwipe(isApproved) {
         return;
     }
 
-    if (engageScore >= 100 && truthScore >= 50) {
-        triggerGameOver("PROMOTED: You hit max engagement while keeping the truth alive. You beat the algorithm!");
-        return;
-    }
 
     postCard.scene.tweens.add({
         targets: truthBar,
