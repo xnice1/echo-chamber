@@ -15,6 +15,8 @@ let gameOverImage;
 let leaderboardText;
 let leaderboardContainer;
 let restartBtnBg;
+let feedbackCard;
+let feedbackTextDisplay;
 
 const API_BASE = 'http://localhost:8000/api/v1';
 let playerId = null;
@@ -247,6 +249,26 @@ function create() {
     gameOverContainer.setDepth(100);
     gameOverContainer.setVisible(false);
 
+    graphics.fillStyle(0xffffff, 1);
+    graphics.fillRoundedRect(0, 0, 400, 140, 24);
+    graphics.lineStyle(2, 0xE5E7EB, 1);
+    graphics.strokeRoundedRect(0, 0, 400, 140, 24);
+    graphics.generateTexture('feedbackBgTex', 400, 140);
+    graphics.clear();
+
+    let feedbackBg = this.add.image(0, 0, 'feedbackBgTex');
+    feedbackTextDisplay = this.add.text(0, 0, '', {
+        fontFamily: 'Inter',
+        fontSize: '16px',
+        fill: '#374151',
+        align: 'center',
+        wordWrap: { width: 350 },
+        fontStyle: 'italic'
+    }).setOrigin(0.5);
+
+    feedbackCard = this.add.container(215, 1050, [feedbackBg, feedbackTextDisplay]);
+    feedbackCard.setDepth(50);
+
     initPlayer();
 
 
@@ -319,7 +341,7 @@ function loadNextPost() {
 
     if (currentPost.image_file && currentPost.image_file !== "null") {
         postImageDisplay.setTexture(currentPost.image_file);
-        postImageDisplay.setDisplaySize(280, 180);
+        postImageDisplay.setDisplaySize(280, 160);
         postImageDisplay.setVisible(true);
         bodyTextDisplay.setY(100);
         bodyTextDisplay.setFontSize('16px');
@@ -337,6 +359,13 @@ function handleSwipe(isApproved) {
     if (isGameOver) return;
     let currentPost = postData[currentPostIndex];
     let scene = postCard.scene;
+
+    scene.tweens.add({
+        targets: feedbackCard,
+        y: 1050,
+        duration: 200,
+        ease: 'Power2'
+    });
 
     scene.sound.play('swipe');
 
@@ -389,6 +418,16 @@ function handleSwipe(isApproved) {
     });
 
     showFloatingText(215, 494, currentPost.truth_impact, currentPost.engage_impact);
+
+    if (currentPost.feedback_text) {
+        feedbackTextDisplay.setText(currentPost.feedback_text);
+        scene.tweens.add({
+            targets: feedbackCard,
+            y: 840,
+            duration: 400,
+            ease: 'Back.easeOut'
+        });
+    }
 
     currentPostIndex++;
     loadNextPost();
@@ -468,6 +507,7 @@ function triggerGameOver(message, isWin = false) {
         gameOverImage.setTexture('systemWarning');
         postCard.scene.sound.play('lose');
     }
+    gameOverImage.setDisplaySize(350, 220);
 
     let completedLevels = isWin ? currentLevel : currentLevel - 1;
     let score = (completedLevels * 1000) + (truthScore * 20) + (timeLeft * 10);
