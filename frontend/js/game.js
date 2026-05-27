@@ -1,6 +1,13 @@
 let timeLeft = 60;
 let timerText;
 let timerEvent;
+let postImageDisplay;
+let fullGameData;
+let currentLevel = 1;
+let transitionTitle;
+let transitionSub;
+let avatar;
+let verifiedBadge;
 
 const config = {
     type: Phaser.AUTO,
@@ -15,13 +22,11 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-// --- Game State Variables ---
 let truthScore = 50;
 let engageScore = 50;
 let currentPostIndex = 0;
 let postData = [];
 
-// --- UI Elements ---
 let postCard;
 let authorTextDisplay;
 let timeTextDisplay;
@@ -30,11 +35,27 @@ let truthBar;
 let engageBar;
 
 function preload() {
-    this.load.json('level1', 'data/level_1.json');
+    this.load.json('level1', 'data/data.json');
+
+    // FIX 1: Corrected folder path to 'assets/avatars/'
+    for (let i = 1; i <= 20; i++) {
+        this.load.image('avatar' + i, 'assets/avatars/avatar' + i + '.jpg');
+    }
+
+    // FIX 2: Loaded the verified badge and the circular avatar frame
+    this.load.image('verified', 'assets/ui/verified.jpg');
+
+    this.load.image('Fake_Gym_Achievement.png', 'assets/ui/Fake_Gym_Achievement.png');
+    this.load.image('Street_Protest.png', 'assets/ui/Street_Protest.png');
+    this.load.image('Weather_Disaster.png', 'assets/ui/Weather_Disaster.png');
+    this.load.image('Weather.png', 'assets/ui/Weather.png');
+    this.load.image('Construction_Work.png', 'assets/ui/Construction_Work.png');
+    this.load.image('Garden.png', 'assets/ui/Garden.png');
 }
 
 function create() {
-    postData = this.cache.json.get('level1').posts;
+    fullGameData = this.cache.json.get('level1');
+    postData = fullGameData.posts;
 
     timerText = this.add.text(215, 160, '0:60', { fontFamily: 'Inter', fontSize: '32px', fill: '#111827', fontStyle: 'bold' }).setOrigin(0.5);
 
@@ -45,7 +66,6 @@ function create() {
             timerText.setText(`0:${timeLeft < 10 ? '0' : ''}${timeLeft}`);
             if (timeLeft <= 0) {
                 timerEvent.remove();
-                // Trigger Game Over / Level Complete screen here
                 postCard.removeInteractive();
                 bodyTextDisplay.setText("TIME'S UP! Shift Over.");
             }
@@ -54,38 +74,34 @@ function create() {
         loop: true
     });
 
-    // --- 1. Draw UI Text & Background Meters ---
-    // Truth Meter (Top)
     this.add.text(20, 45, 'Truth', { fontFamily: 'Inter', fontSize: '14px', fill: '#9CA3AF' });
     this.add.rectangle(20, 65, 300, 20, 0xD1D5DB).setOrigin(0, 0).setAlpha(0.28);
     truthBar = this.add.rectangle(20, 65, 192, 20, 0x22C55E).setOrigin(0, 0);
 
-    // Engagement Meter (Bottom)
     this.add.text(20, 95, 'Engagement', { fontFamily: 'Inter', fontSize: '14px', fill: '#9CA3AF' });
     this.add.rectangle(20, 115, 300, 20, 0xD1D5DB).setOrigin(0, 0).setAlpha(0.28);
     engageBar = this.add.rectangle(20, 115, 192, 20, 0xEF4444).setOrigin(0, 0);
 
-    // --- 2. Generate Rounded Textures (No Figma exports needed!) ---
     let graphics = this.make.graphics();
 
-    // Main White Card
     graphics.fillStyle(0xffffff, 1);
     graphics.fillRoundedRect(0, 0, 382, 456, 32);
-    graphics.lineStyle(1, 0x000000, 0.1); // Subtle border
+    graphics.lineStyle(1, 0x000000, 0.1);
     graphics.strokeRoundedRect(0, 0, 382, 456, 32);
     graphics.generateTexture('cardBg', 382, 456);
     graphics.clear();
 
-    // Inner Gray Text Area
     graphics.fillStyle(0xE5E7EB, 1);
     graphics.fillRoundedRect(0, 0, 325, 319, 32);
     graphics.generateTexture('innerBg', 325, 319);
     graphics.clear();
 
-    // --- 3. Build the Draggable Card Container ---
     let bgImage = this.add.image(0, 0, 'cardBg');
     let innerImage = this.add.image(0, 40, 'innerBg');
-    let avatar = this.add.circle(-140, -170, 30, 0xE5E7EB);
+
+    // FIX 3: Add the avatar and the hollow circle frame on top of it
+    avatar = this.add.image(-140, -170, 'avatar1').setDisplaySize(60, 60);
+    let avatarFrameImage = this.add.image(-140, -170, 'avatarFrame').setDisplaySize(60, 60);
 
     authorTextDisplay = this.add.text(-90, -180, 'Username', {
         fontFamily: 'Inter', fontSize: '20px', fill: '#111827', fontStyle: 'bold'
@@ -95,19 +111,28 @@ function create() {
         fontFamily: 'Inter', fontSize: '12px', fill: '#9CA3AF'
     });
 
+    // FIX 4: Re-added the verified badge
+    verifiedBadge = this.add.image(0, -170, 'verified').setDisplaySize(20, 20);
+    verifiedBadge.setVisible(false);
+
     bodyTextDisplay = this.add.text(-140, -90, 'Loading...', {
         fontFamily: 'Inter', fontSize: '24px', fill: '#000000',
         wordWrap: { width: 280 }
     });
 
-    // Group everything into one container at the center of the Pro Max screen
-    postCard = this.add.container(215, 494, [bgImage, innerImage, avatar, authorTextDisplay, timeTextDisplay, bodyTextDisplay]);
+    postImageDisplay = this.add.image(0, -10, '').setDisplaySize(280, 160);
+    postImageDisplay.setVisible(false);
+
+    // FIX 5: Added avatarFrameImage and verifiedBadge into the container array!
+    postCard = this.add.container(215, 494, [bgImage, innerImage, avatar, authorTextDisplay, verifiedBadge, timeTextDisplay, postImageDisplay, bodyTextDisplay]);
+
     postCard.setSize(382, 456);
     postCard.setInteractive({ draggable: true });
 
-    loadNextPost();
+    transitionTitle = this.add.text(215, 420, '', { fontFamily: 'Inter', fontSize: '56px', fill: '#111827', fontStyle: 'bold' }).setOrigin(0.5).setAlpha(0);
+    transitionSub = this.add.text(215, 480, '', { fontFamily: 'Inter', fontSize: '24px', fill: '#9CA3AF' }).setOrigin(0.5).setAlpha(0);
+    showTransition("LEVEL 1", "The Bots & Spam");
 
-    // --- 4. Input Logic (Drag & Drop) ---
     this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
         gameObject.x = dragX;
         gameObject.y = 494 + (dragY - 494) * 0.1;
@@ -116,11 +141,10 @@ function create() {
 
     this.input.on('dragend', function (pointer, gameObject) {
         if (gameObject.x < 120) {
-            handleSwipe(false); // Reject
+            handleSwipe(false);
         } else if (gameObject.x > 310) {
-            handleSwipe(true);  // Approve
+            handleSwipe(true);
         } else {
-            // Snap back
             gameObject.scene.tweens.add({
                 targets: gameObject,
                 x: 215,
@@ -131,33 +155,74 @@ function create() {
             });
         }
     });
-
-    // --- 5. Input Logic (Keyboard) ---
     this.input.keyboard.on('keydown-LEFT', () => { handleSwipe(false); });
     this.input.keyboard.on('keydown-RIGHT', () => { handleSwipe(true); });
 }
 
-// --- 6. Core Functions ---
 function loadNextPost() {
     if (currentPostIndex >= postData.length) {
-        authorTextDisplay.setText("Admin");
-        bodyTextDisplay.setText("Shift complete. No more posts to review.");
-        timeTextDisplay.setText("Just now");
-        postCard.removeInteractive();
-        return;
+        if (currentLevel === 1) {
+            currentLevel = 2;
+            postData = fullGameData.level_2_posts;
+            currentPostIndex = 0;
+            timeLeft = 60;
+            showTransition("LEVEL 2", "The Deepfakes");
+            return;
+
+        } else if (currentLevel === 2) {
+            currentLevel = 3;
+            postData = fullGameData.level_3_posts;
+            currentPostIndex = 0;
+            timeLeft = 60;
+            showTransition("LEVEL 3", "The Gray Area");
+            return;
+
+        } else {
+            authorTextDisplay.setText("System Admin");
+            bodyTextDisplay.setText("Shift complete. Final scores locked.");
+            timeTextDisplay.setText("Just now");
+            postImageDisplay.setVisible(false);
+            bodyTextDisplay.setY(-90);
+            postCard.removeInteractive();
+            return;
+        }
     }
 
     let currentPost = postData[currentPostIndex];
     authorTextDisplay.setText(currentPost.author);
     bodyTextDisplay.setText(currentPost.text);
 
-    // Reset card visually
+    if (currentPost.verified === true) {
+        verifiedBadge.setVisible(true);
+        verifiedBadge.setX(authorTextDisplay.x + authorTextDisplay.width + 15);
+    } else {
+        verifiedBadge.setVisible(false);
+    }
+
+    let randomNum = Phaser.Math.Between(1, 20);
+    avatar.setTexture('avatar' + randomNum);
+
+    if (currentPost.image_file && currentPost.image_file !== "null") {
+        postImageDisplay.setTexture(currentPost.image_file);
+        postImageDisplay.setDisplaySize(280, 180);
+        postImageDisplay.setVisible(true);
+        bodyTextDisplay.setY(100);
+        bodyTextDisplay.setFontSize('16px');
+    } else {
+        postImageDisplay.setVisible(false);
+        bodyTextDisplay.setY(-90);
+        bodyTextDisplay.setFontSize('24px');
+    }
+
     postCard.setPosition(215, 494);
     postCard.angle = 0;
 }
 
 function handleSwipe(isApproved) {
     let currentPost = postData[currentPostIndex];
+
+    let flashColor = isApproved ? 0x22C55E : 0xEF4444;
+    postCard.scene.cameras.main.flash(200, (flashColor >> 16) & 255, (flashColor >> 8) & 255, flashColor & 255);
 
     if (isApproved) {
         truthScore += currentPost.truth_impact;
@@ -170,7 +235,21 @@ function handleSwipe(isApproved) {
     truthScore = Phaser.Math.Clamp(truthScore, 0, 100);
     engageScore = Phaser.Math.Clamp(engageScore, 0, 100);
 
-    // Animate the bars to their new widths (Max width is 300px)
+    if (truthScore <= 0) {
+        triggerGameOver("FIRED: Trust reached 0%. The platform is now a toxic wasteland of misinformation.");
+        return;
+    }
+
+    if (engageScore <= 0) {
+        triggerGameOver("FIRED: Engagement reached 0%. Users got bored, investors pulled out, and the platform died.");
+        return;
+    }
+
+    if (engageScore >= 100 && truthScore >= 50) {
+        triggerGameOver("PROMOTED: You hit max engagement while keeping the truth alive. You beat the algorithm!");
+        return;
+    }
+
     postCard.scene.tweens.add({
         targets: truthBar,
         width: (truthScore / 100) * 300,
@@ -185,15 +264,55 @@ function handleSwipe(isApproved) {
         ease: 'Power2'
     });
 
+    showFloatingText(215, 494, currentPost.truth_impact, currentPost.engage_impact);
+
     currentPostIndex++;
     loadNextPost();
 }
 
+function triggerGameOver(message) {
+    postCard.removeInteractive();
+    timerEvent.paused = true;
+    postImageDisplay.setVisible(false);
+
+    authorTextDisplay.setText("SYSTEM ALERT");
+    authorTextDisplay.setColor("#EF4444");
+    timeTextDisplay.setText("");
+
+    bodyTextDisplay.setText(message);
+    bodyTextDisplay.setY(-90);
+    bodyTextDisplay.setFontSize('22px');
+
+    postCard.setPosition(215, 494);
+    postCard.angle = 0;
+}
+
+function showTransition(title, subtitle) {
+    postCard.setVisible(false);
+    postCard.removeInteractive();
+    timerEvent.paused = true;
+
+    transitionTitle.setText(title);
+    transitionSub.setText(subtitle);
+
+    postCard.scene.tweens.add({
+        targets: [transitionTitle, transitionSub],
+        alpha: 1,
+        duration: 500,
+        yoyo: true,
+        hold: 1500,
+        onComplete: () => {
+            postCard.setVisible(true);
+            postCard.setInteractive({ draggable: true });
+            timerEvent.paused = false;
+            loadNextPost();
+        }
+    });
+}
 
 function showFloatingText(x, y, truthAmount, engageAmount) {
     let truthStr = truthAmount >= 0 ? `+${truthAmount} Truth` : `${truthAmount} Truth`;
     let truthColor = truthAmount >= 0 ? '#22C55E' : '#EF4444';
-
     let tText = postCard.scene.add.text(x - 50, y - 50, truthStr, { fontFamily: 'Inter', fontSize: '24px', fill: truthColor, fontStyle: 'bold' }).setAlpha(1);
 
     postCard.scene.tweens.add({
