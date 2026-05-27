@@ -37,12 +37,10 @@ let engageBar;
 function preload() {
     this.load.json('level1', 'data/data.json');
 
-    // FIX 1: Corrected folder path to 'assets/avatars/'
     for (let i = 1; i <= 20; i++) {
         this.load.image('avatar' + i, 'assets/avatars/avatar' + i + '.jpg');
     }
 
-    // FIX 2: Loaded the verified badge and the circular avatar frame
     this.load.image('verified', 'assets/ui/verified.jpg');
 
     this.load.image('Fake_Gym_Achievement.png', 'assets/ui/Fake_Gym_Achievement.png');
@@ -99,7 +97,6 @@ function create() {
     let bgImage = this.add.image(0, 0, 'cardBg');
     let innerImage = this.add.image(0, 40, 'innerBg');
 
-    // FIX 3: Add the avatar and the hollow circle frame on top of it
     avatar = this.add.image(-140, -170, 'avatar1').setDisplaySize(60, 60);
     let avatarFrameImage = this.add.image(-140, -170, 'avatarFrame').setDisplaySize(60, 60);
 
@@ -111,7 +108,6 @@ function create() {
         fontFamily: 'Inter', fontSize: '12px', fill: '#9CA3AF'
     });
 
-    // FIX 4: Re-added the verified badge
     verifiedBadge = this.add.image(0, -170, 'verified').setDisplaySize(20, 20);
     verifiedBadge.setVisible(false);
 
@@ -120,10 +116,10 @@ function create() {
         wordWrap: { width: 280 }
     });
 
+
     postImageDisplay = this.add.image(0, -10, '').setDisplaySize(280, 160);
     postImageDisplay.setVisible(false);
 
-    // FIX 5: Added avatarFrameImage and verifiedBadge into the container array!
     postCard = this.add.container(215, 494, [bgImage, innerImage, avatar, authorTextDisplay, verifiedBadge, timeTextDisplay, postImageDisplay, bodyTextDisplay]);
 
     postCard.setSize(382, 456);
@@ -231,6 +227,7 @@ function handleSwipe(isApproved) {
         truthScore -= currentPost.truth_impact;
         engageScore -= currentPost.engage_impact;
     }
+
 
     truthScore = Phaser.Math.Clamp(truthScore, 0, 100);
     engageScore = Phaser.Math.Clamp(engageScore, 0, 100);
