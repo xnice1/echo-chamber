@@ -8,6 +8,8 @@ let transitionTitle;
 let transitionSub;
 let avatar;
 let verifiedBadge;
+let gameOverContainer;
+let gameOverText;
 
 const config = {
     type: Phaser.AUTO,
@@ -43,6 +45,7 @@ function preload() {
 
     this.load.image('verified', 'assets/ui/verified.jpg');
 
+    this.load.image('systemWarning', 'assets/ui/system_warning.jpg');
     this.load.image('Fake_Gym_Achievement.png', 'assets/ui/Fake_Gym_Achievement.png');
     this.load.image('Street_Protest.png', 'assets/ui/Street_Protest.png');
     this.load.image('Weather_Disaster.png', 'assets/ui/Weather_Disaster.png');
@@ -94,6 +97,11 @@ function create() {
     graphics.generateTexture('innerBg', 325, 319);
     graphics.clear();
 
+    graphics.fillStyle(0x7F1D1D, 1); // Dark red color
+    graphics.fillRoundedRect(0, 0, 360, 480, 24); // 24 is the corner radius
+    graphics.generateTexture('popupBgTex', 360, 480);
+    graphics.clear();
+
     let bgImage = this.add.image(0, 0, 'cardBg');
     let innerImage = this.add.image(0, 40, 'innerBg');
 
@@ -128,6 +136,22 @@ function create() {
     transitionTitle = this.add.text(215, 420, '', { fontFamily: 'Inter', fontSize: '56px', fill: '#111827', fontStyle: 'bold' }).setOrigin(0.5).setAlpha(0);
     transitionSub = this.add.text(215, 480, '', { fontFamily: 'Inter', fontSize: '24px', fill: '#9CA3AF' }).setOrigin(0.5).setAlpha(0);
     showTransition("LEVEL 1", "The Bots & Spam");
+
+    let popupBg = this.add.image(0, 0, 'popupBgTex');
+    let warningImg = this.add.image(0, -90, 'systemWarning').setDisplaySize(320, 200);
+
+    gameOverText = this.add.text(0, 80, '', {
+        fontFamily: 'Inter',
+        fontSize: '22px',
+        fill: '#ffffff',
+        align: 'center',
+        wordWrap: { width: 320 }
+    }).setOrigin(0.5);
+
+    gameOverContainer = this.add.container(215, 494, [popupBg, warningImg, gameOverText]);
+    gameOverContainer.setDepth(100);
+    gameOverContainer.setVisible(false);
+
 
     this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
         gameObject.x = dragX;
@@ -266,18 +290,18 @@ function handleSwipe(isApproved) {
 function triggerGameOver(message) {
     postCard.removeInteractive();
     timerEvent.paused = true;
-    postImageDisplay.setVisible(false);
 
-    authorTextDisplay.setText("SYSTEM ALERT");
-    authorTextDisplay.setColor("#EF4444");
-    timeTextDisplay.setText("");
+    postCard.setAlpha(0.2);
+    gameOverText.setText(message);
+    gameOverContainer.setVisible(true);
 
-    bodyTextDisplay.setText(message);
-    bodyTextDisplay.setY(-90);
-    bodyTextDisplay.setFontSize('22px');
-
-    postCard.setPosition(215, 494);
-    postCard.angle = 0;
+    gameOverContainer.setScale(0.5);
+    gameOverContainer.scene.tweens.add({
+        targets: gameOverContainer,
+        scale: 1,
+        duration: 300,
+        ease: 'Back.easeOut'
+    });
 }
 
 function showTransition(title, subtitle) {
